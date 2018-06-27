@@ -108,8 +108,21 @@ function str2arr(d){
  //1.把弹出的元素,拆分成数组(比如,泼水节->[泼,泼水,泼水节,水,水节,节],我们叫arr防止混淆),然后从原始栈中移除 这个数组(arr)中的所有元素
  //2.把命中的键值放到要返回的数组中
  //3.退出while循环,匹配tags中的下一个
+
+
+ //这里面有个问题:(此方法改为Old新的 改善的 方法写在后面)
+ tags循环在readySearch外面是不合理的,
+ 比如,tags里有[泼水节,端午节,儿童节],
+ 此时,搜'端午节',拆分出的数组是[端,午,节,端午,午节,端午节]
+ for(tags):
+    1.泼水节
+        while(readySearch):
+        端午节x
+        午节x
+        端午x
+        节 o->这个时候命中了,但是,命中的是'泼水节',显然是不想要的
  **/
-function search(d){
+function searchOld(d){
 
     //获得拆分之后的数组
     let readySearch = str2arr(d);
@@ -120,7 +133,9 @@ function search(d){
     }
 
     //数组排序,元素长的在后面
-    let arrSorted = readySearch.sort(function(a,b){ if(a.length>b.length) return 1;});
+    //TODO error:这里的排序,这对>做了处理,else应该返回-1,与其这样,还不如 return a.length-b.length
+    // let arrSorted = readySearch.sort(function(a,b){ if(a.length>b.length) return 1;});
+    let arrSorted = readySearch.sort(function(a,b){return a.length-b.length;});
 
     //所搜结果数组
     let resArr = [];
@@ -128,6 +143,11 @@ function search(d){
     for(let j in tags){
         if(!tags.hasOwnProperty(j)){
             return false;
+        }
+
+        //key已经存在了直接跳过
+        if(resKey.indexOf(j)!== -1){
+            continue;
         }
 
         // console.log('现在的数组是:--');
@@ -140,10 +160,6 @@ function search(d){
         while(tempArr.length>0){
             let str = tempArr.pop();
             // console.log(str);
-            //key已经存在了直接跳过
-            if(resKey.indexOf(j)!== -1){
-                continue;
-            }
 
             // console.log(`find '${str}' from '${tags[j]}' result is '${temp}'`);
             //没有找到找下一个,先搜的都是长的
@@ -164,11 +180,90 @@ function search(d){
                 let index = arrSorted.indexOf(i);
 
                 //移除元素
+                //TODO error:index等于-1的时候,移除的是最后一个元素,要加判断
                 arrSorted.splice(index,1);
             }
 
             resKey.push(j);
             resArr.push(tags[j]);
+
+            //如果命中的元素长度大于 str的长度,那么不应该移除自己本身,这里再加回去
+            //TODO error:等于也要加进去,不然,[端午,端午节]搜端午,'端午'搜出来了,移除掉了,后面的端午节就出不来了
+            if(tags[j].length>str.length){
+                arrSorted.push(str);
+            }
+
+            //命中了就退出while循环,匹配tags中的下一个
+            break;
+
+        }
+    }
+
+    return {'value':resArr,'key':resKey};
+}
+
+//改善后的search
+function search(d){
+
+    //获得拆分之后的数组
+    let readySearch = str2arr(d);
+
+    //如果数组长度是0,就不做什么操作
+    if(readySearch.length === 0){
+        return false;
+    }
+
+    //数组排序,元素长的在后面
+    let arrSorted = readySearch.sort(function(a,b){return a.length-b.length;});
+    //所搜结果数组
+    let resArr = [];
+    let resKey = [];
+    while(arrSorted.length>0){
+        let str = arrSorted.pop();
+
+        for(let j in tags){
+            if(!tags.hasOwnProperty(j)){
+                return false;
+            }
+
+            //key已经存在了直接跳过
+            if(resKey.indexOf(j)!== -1){
+                continue;
+            }
+
+            // console.log(str);
+
+            // console.log(`find '${str}' from '${tags[j]}' result is '${temp}'`);
+            //没有找到找下一个,先搜的都是长的
+            if(tags[j].indexOf(str) === -1){
+                continue;
+            }
+
+            //找到了
+            //移除重复的搜索,防止重复,
+            //比如,成都,搜到了,那么,'成','都',肯定也都能搜到,所以,成,都,就都去掉就好了,就不要再搜索了
+
+            // console.log(tags[j]);
+            //拆出数组
+            let removeArr = str2arr(str);
+            for(let i of removeArr){
+                // console.log(i);
+                // console.log('从数组中移除了:-'+arrSorted[arrSorted.indexOf(i)]);
+                let index = arrSorted.indexOf(i);
+
+                //移除元素
+                if(index!==-1){
+                    arrSorted.splice(index,1);
+                }
+            }
+
+            resKey.push(j);
+            resArr.push(tags[j]);
+
+            //如果命中的元素长度大于 str的长度,那么不应该移除自己本身,这里再加回去
+            if(tags[j].length>=str.length){
+                arrSorted.push(str);
+            }
 
             //命中了就退出while循环,匹配tags中的下一个
             break;

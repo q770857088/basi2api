@@ -1,0 +1,66 @@
+最近开始把在GitHub上的项目同步到git@oschina上，
+但是直接导入GitHub项目是不会有你的提交记录的
+所以需要在本地推送远程时同步到两个不同的git远程仓库
+
+1.修改Config文件
+在你的项目目录下找到.git文件夹，如果没有就需要查看显示隐藏文件了。
+git文件夹
+
+然后找到里面的config文件
+config文件
+
+一般正常情况下config里面的内容大概是这样婶儿的：
+
+[core]
+    repositoryformatversion = 0
+    filemode = false
+    bare = false
+    logallrefupdates = true
+    symlinks = false
+    ignorecase = true
+[remote "origin"]
+    url = git@github.com:hwangfantasy/beautify.git
+    fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+[gui]
+    wmstate = normal
+    geometry = 841x483+156+156 189 218
+
+这个时候我们需要修改它，让它有除了orgin之外的另外一个远程仓库
+可以取名为“mirror”即镜像仓库，我就把GitHub做为主要远程仓库，git@oschina做为国内镜像仓库
+于是修改后的config文件如下所示：
+
+[core]
+    repositoryformatversion = 0
+    filemode = false
+    bare = false
+    logallrefupdates = true
+    symlinks = false
+    ignorecase = true
+[remote "origin"]
+    url = git@github.com:hwangfantasy/beautify.git
+    fetch = +refs/heads/*:refs/remotes/origin/*
+[remote "mirror"]
+    url = git@git.oschina.net:hwangfantasy/beautify.git
+    fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+    remote = origin
+    remote = mirror
+    merge = refs/heads/master
+[gui]
+    wmstate = normal
+    geometry = 841x483+156+156 189 218
+
+2. pull操作
+使用以下命令，可以分别从两个远程仓库pull：
+
+git pull origin master
+git pull mirror master
+
+3. push操作
+使用以下命令，可以分别push到两个远程仓库：
+
+git push origin master
+git push mirror master

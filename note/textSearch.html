@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <style>
+        input[type=search]{
+            background-color:#fff;
+            line-height:29px;
+        }
+        .mui-title{
+            color:#333;
+            right:50px !important;
+        }
+        .search-list{
+            margin-top:0.2rem;
+        }
+        .search-list li{
+            float: left;
+            width:50%;
+            height:0.7rem;
+            line-height:0.5rem;
+            text-overflow: ellipsis;
+            overflow:hidden;
+            white-space: nowrap;
+            padding:0 0.2rem;
+        }
+        .search-list {
+            color:#333;
+            font-size: 0.28rem;
+            display: inline-block;
+            width:100%;
+            height:100%;
+        }
+        .list-title{
+            font-size: 0.32rem;
+            color:#ff008c;
+        }
+
+        .result-list {
+            margin-top: 0.88rem;
+            max-height: 7rem;
+            background: rgba(255, 255, 255, .7);
+            overflow-y: auto;
+        }
+
+        .result-list li  {
+            display: block;
+            background: #FFF;
+            color: #333;
+            font-size: 0.28rem;
+            height: 0.7rem;
+            line-height: 0.7rem;
+            border-bottom: 0.02rem solid #ccc;
+            padding-left: 15%;
+        }
+        .consequence-list li{
+            height:0.8rem;
+            line-height:0.9rem;
+            border-bottom:1px solid #ccc;
+        }
+        .consequence-list a{
+            color:#333;
+            font-size: 0.28rem;
+        }
+    </style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-closeempty mui-pull-left"></a>
+    <h1 class="mui-title">
+        <input id="s-v" type="search" class="mui-input-clear" placeholder="Search">
+    </h1>
+    <a class="mui-btn mui-btn-link mui-pull-right" href="javascript:;" id="s">搜索</a>
+</header>
+<ul id="display-res" class="result-list ">
+</ul>
+<div class="mui-content">
+
+</div>
+</body>
+<script type="text/javascript">
+    //输入框内容
+    var value = '';
+    let storage = {};
+    let readyString = '';
+
+    //缓存搜索内容,上次结果列表,上次展示的结果类型,上次的结果列表
+    if(window.localStorage){
+        storage=window.localStorage;
+
+        //上次搜索内容
+        if(storage.hasOwnProperty('content')){
+            value = storage['content'];
+            document.getElementById('s-v').value = value;
+            displaySearch(value);
+        }
+    }
+    var tags = [
+        '成都',//目的地 0
+        '北京',//1
+        '杭州',//2
+        '鱼香肉丝',//3食
+        '锅包肉',//4
+        '宫保鸡丁',//5
+        '辣椒炒肉',//6
+        '鱼香茄子',//7
+        '蓝天别墅',//8////住
+        '海景别墅',//9
+        '山景别墅',//10
+        '河流别墅',//11
+        '树屋',//12
+        '泼水节',//13////节
+        '端午节',//14
+        '桃花节',//15
+        '樱花季',//16
+        '玫瑰季',//17
+        '西湖美景',//18///地
+        '人民英雄纪念碑',//19
+        '玉林路的尽头',//20
+        '鼓楼大街',//21
+        '摩天轮',//22///玩
+        '过山车',//23
+        '滑雪',//24
+        '浮潜',//25
+        '大摆锤', //26
+        '长城', //27
+        '上海', //28
+        '东方明珠', //29
+        '迪士尼', //30
+        '甜食', //31
+        '条头糕薄荷糕', //32
+        '南翔小笼包', //33
+        '上海国际服装文化节', //34
+        '上海国际花卉节', //35
+        '上海国际茶文化节',  //36
+        '上海艺术博览会' ,  //37
+        '外滩' ,  //38
+        '城隍庙', //39
+        '上海博物馆', //40
+        '海盗船' ,  //41
+    ];
+
+
+    //这个方法这样实现更好,自己体会
+    function str2arr(d){
+        var Arr = d.split('');
+        var length = Arr.length;
+
+        //组合 的等待搜索 的字符串 的数组
+        var readySearch = [];
+        for(let i in Arr){
+            let j=i;
+            let str = '';
+            while(j<length){
+                str += Arr[j];
+                readySearch.push(str);
+                j++;
+            }
+        }
+        return readySearch;
+    }
+
+    /**
+     在tags里面搜索
+     **/
+    function search(d){
+
+        //获得拆分之后的数组
+        let readySearch = str2arr(d);
+
+        //如果数组长度是0,就不做什么操作
+        if(readySearch.length === 0){
+            return false;
+        }
+
+        //数组排序,元素长的在后面
+        let arrSorted = readySearch.sort(function(a,b){
+            return a.length-b.length;
+        });
+
+        // console.log('当前数组:---');
+        // console.log(arrSorted);
+        var resKey = [];
+
+        while(arrSorted.length>0){
+            let str = arrSorted.pop();
+
+            for(let j in tags){
+
+                // console.log('搜索的字符串是:'+str);
+                var temp = tags[j].indexOf(str);
+
+                //没找到继续
+                if(temp === -1){
+                    continue;
+                }
+
+                //找到了,先搞数组
+
+                // console.log('在:'+tags[j]+'中没有找到:'+str);
+                // console.log('找到了:'+str)
+                //拆出数组
+                let removeArr = str2arr(str);
+
+                // console.log('移除的数组是:')
+                // console.log(removeArr);
+                for(let i of removeArr){
+                    // console.log('打算移除:'+i);
+                    //console.log('从数组中移除了:-'+arrSorted[arrSorted.indexOf(i)]);
+                    let index = arrSorted.indexOf(i);
+                    //不等于-1的时候才能移除啊
+
+                    if(index !== -1){
+                        //移除元素
+                        arrSorted.splice(index,1);
+                    }
+                }
+
+                //如果命中的元素长度大于 str的长度,那么不应该移除自己本身,这里再加回去
+                // if(tags[j].length>=str.length){
+                // 	arrSorted.push(str);
+                // }
+
+                if(resKey.indexOf(j)!= -1){
+                    // console.log('结果中已经存在:'+tags[j]);
+
+                    //更符合的往前排
+                    resKey.splice(resKey.indexOf(j),1);
+                    resKey.unshift(j);
+                    continue;
+                }
+
+                resKey.push(j);
+            }
+        }
+
+        return resKey;
+    }
+
+
+    function Q(id){
+        return document.getElementById(id);
+    }
+
+    //地区列表
+    function areaList(tag,data){
+        let ul = document.createElement('ul');
+        ul.className = 'consequence-list';
+
+        for(let i of data){
+            let areaName = tags[i];
+            let li = document.createElement('li');
+            li.className = 'bs2-to-name';
+            li.setAttribute('data-tag',tag);
+            li.setAttribute('data-area',i);
+            li.innerHTML = ` <i class="mui-icon mui-icon-flag">${areaName}</i>`;
+            ul.appendChild(li);
+        }
+        document.querySelector('.mui-content').innerHTML='';
+        document.querySelector('.mui-content').appendChild(ul)
+    }
+
+
+    function displaySearch(v){
+        //展示搜索结果
+        let display = search(v);
+
+        readyString = display[0];
+
+        for(let i in display){
+            let con = document.createElement('li');
+            con.className = 'find-two';
+            con.setAttribute('data-tag',display[i]);
+            con.innerHTML = tags[display[i]];
+            document.getElementById('display-res').appendChild(con);
+        }
+    }
+
+    document.getElementById('s-v').oninput=function(){
+        if(value === this.value && this.value!=''){
+            return true;
+        }
+
+        //清空搜索框
+        document.getElementById('display-res').innerHTML='';
+
+        value = this.value;
+
+        if(window.localStorage){
+            storage['content'] = value;
+        }
+
+        displaySearch(value);
+
+    };
+
+    //直接点搜索
+    document.getElementById('s').onclick=function(){
+
+        if(window.localStorage){
+            if(storage.hasOwnProperty('history') && value!==''){
+                storage.history+=','+value;
+            }
+        }
+
+        window.location.href = '../index.html?tag='+readyString;
+    }
+</script>
+</html>
