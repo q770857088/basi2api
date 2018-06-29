@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>预览效果</h1>
+    <blockquote>
+        http://api.basitour.com/mmm
+    </blockquote>
+    <h1>banner</h1>
+    <pre>
+        url:http://api.basitour.com/banner
+        post
+        param:type(pc,wap),func('list')
+    </pre>
+    <h1>地区</h1>
+    <h3>所有列表</h3>
+    <code>
+        $.post('http://api.basitour.com/area',{func:'lists',id:'0'},function(d){
+        console.log(d);
+        },'json')
+    </code>
+    <h3>热门地区</h3>
+    <code>
+        $.post('http://api.basitour.com/area',{func:'hot'},function(d){
+        console.log(d);
+        },'json')
+    </code>
+    <h1>别墅</h1>
+    <pre>
+        $.post('http://api.basitour.com/villa',{func:'lists'},function(d){
+	console.log(d);
+},'json');
+    </pre>
+    <h1>公共接口</h1><i>不同的参数代表不同读数据</i>
+    <pre>
+                $.post('http://api.basitour.com/villa',{func:'lists',table:'act'},function(d){
+	console.log(d);
+},'json');
+
+        <h2>table参数:</h2>
+        act===活动数据,
+        act_villa===活动别墅,
+        area=>地区
+    </pre>
+</body>
+</html>

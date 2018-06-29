@@ -2,8 +2,8 @@
 namespace classes;
 class Db{
     private $db;
-    public function __construct(){
-        $db = new \PDO(DB_CON, DB_USER, DB_PWD);
+    public function __construct($con,$user,$pwd){
+        $db = new \PDO($con,$user,$pwd);
         $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $db->exec('set names utf8');
         $this->db = $db;

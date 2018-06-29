@@ -1,22 +1,45 @@
 <?php
 namespace api;
-use classes\Banner;
 use classes\Db;
 
-$db = new Db();
-$banner = new Banner($db);
+class banner{
 
-$typeArr = ['pc'=>1,'wap'=>'0'];
+    public $json;
+    public function __construct(jsonS $jsonS)
+    {
+        $this->json = $jsonS;
+    }
 
-$param = $_POST['type'];
-if(array_key_exists($param,$typeArr)){
-    $type = $typeArr[$param];
-}else{
-    echo json_encode(array('status'=>0,'msg'=>'类型不存在'));
-    exit;
+    /**
+     * Banner列表
+     * @return jsonS
+     */
+    public function lists(){
+        $db = new Db(DB_CON, DB_USER, DB_PWD);
+        $banner = new \classes\Banner($db);
+
+        $typeArr = ['pc'=>1,'wap'=>'0'];
+        if(!array_key_exists('type',$_POST)){
+            $this->json->msg = '请传参数type';
+            return $this->json;
+        }
+
+        $param = $_POST['type'];
+        if(array_key_exists($param,$typeArr)){
+            $type = $typeArr[$param];
+        }else{
+            $this->json->msg = '类型不存在';
+            return $this->json;
+        }
+
+        $res = $banner->lists($type);
+
+        if(empty($res)){
+            $this->json->msg='数据为空';
+            return $this->json;
+        }
+
+        $this->json->data = $res;
+        return $this->json;
+    }
 }
-
-
-$res = $banner->lists($type);
-
-echo json_encode($res);
