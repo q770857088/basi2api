@@ -18,7 +18,7 @@ class banner{
         $db = new Db(DB_CON, DB_USER, DB_PWD);
         $banner = new \classes\Banner($db);
 
-        $typeArr = ['pc'=>1,'wap'=>'0'];
+        $typeArr = ['pc'=>0,'wap'=>'1'];
         if(!array_key_exists('type',$_POST)){
             $this->json->msg = '请传参数type';
             return $this->json;

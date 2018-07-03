@@ -5,7 +5,14 @@ spl_autoload_register(function ($class_name) {
     if($arr[0] === 'root'){
         require_once $arr[1].'.php';
     }else{
-        require_once $arr[0].DIRECTORY_SEPARATOR.$arr[1].'.php';
+        $i = 1;
+        $path = $arr[0].DIRECTORY_SEPARATOR.$arr[$i];
+        while(!is_file($path.'.php')&&array_key_exists($i,$arr)){
+            $i++;
+            $path .= DIRECTORY_SEPARATOR.$arr[$i];
+        }
+
+        require_once $path.'.php';
     }
 });
 

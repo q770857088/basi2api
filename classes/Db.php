@@ -43,11 +43,18 @@ class Db{
         echo $stmt->rowCount();
     }
 
-    //TODO 插入方法
-    public function inserts($arr){
-        $sql = "INSERT INTO `user` (`login` ,`password`)VALUES (:login, :password)";
+    //插入方法
+    public function inserts($table,$data){
+        $arrKey = array_keys($data);
+        $joinKey = join('`,`',$arrKey);
+        $joinKey = "`{$joinKey}`";
+
+        $value = join(',:',$arrKey);
+        $value = ":{$value}";
+
+        $sql = "INSERT INTO `bs2_{$table}` ({$joinKey}) VALUE ($value)";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array(':login'=>'kevin2',':password'=>''));
+        $stmt->execute($data);
         return $this->db->lastinsertid();
     }
 }
