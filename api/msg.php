@@ -43,20 +43,21 @@ class msg{
 
     public function sendMsg()
     {
-
         header('Content-Type: text/plain; charset=utf-8');
         session_start();
 
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
+        $current_time = time();
 
-        if(time()-Cache::getCache($ip)<1){
+        $times = $current_time-Cache::getCache($ip);
+        $this->json->data = $times;
+
+        if($times<2){
             $this->json->msg='请求频繁';
             return $this->json;
         }
 
-        $current_time = time();
-
-        Cache::setCache($ip,$$current_time);
+        Cache::setCache($ip,$current_time);
 
 //        $_POST['phone'] = '15210404762';
         if(!array_key_exists('phone',$_POST)){
@@ -67,12 +68,10 @@ class msg{
         //获取用户手机号
         $tel = $_POST['phone'];
 
+        $sessionKey = 'time'.$tel;
+
         //上次时间
-        $beforeTime = $_SESSION['time'.$tel];
-
-        $timeDiff = time()-$beforeTime;
-
-        if($timeDiff<60){
+        if(array_key_exists($sessionKey,$_SESSION) && $current_time-$_SESSION[$sessionKey]<60){
             $this->json->msg='请在一分钟后再发送';
             return $this->json;
         }
@@ -82,6 +81,7 @@ class msg{
 
         //发送验证码
         $response = $this->sendSms($tel,$code);
+
         //返回结果状态
         $info = $this->object2array($response);
         $info['Code'] = "OK";
@@ -129,7 +129,6 @@ class msg{
 
         // 必填，设置雉短信接收号码
         $request->setPhoneNumbers($phoneNumbers);
-
 
         // 必填，设置签名名称
         $signName = SIGN_NAME; // 短信签名

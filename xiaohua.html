@@ -39,14 +39,35 @@
     </pre>
     <h1>公共接口</h1><i>不同的参数代表不同读数据</i>
     <pre>
-                $.post('http://api.basitour.com/common',{func:'lists',table:'act'},function(d){
-	console.log(d);
-},'json');
+$.post('http://api.basitour.com/common',
+        {func:'lists',table:'act'},
+        function(d){
+	        console.log(d);
+        },'json');
 
         <h2>table参数:</h2>
         act===活动数据,
         act_villa===活动别墅,
         area=>地区
     </pre>
+<h1>发送验证码</h1>
+<pre>
+$.post('http://api.basitour.com/msg',
+    {func:'sendMsg',phone:'15210404762'},
+    function(d){
+	    console.log(d);
+    },'json'
+);
+</pre>
+<h1>注册接口</h1>
+<pre>
+$.post('http://api.basitour.com/user',
+    {func:'register',phone:'15210404762',
+    code:'401854'
+    },
+    function(d){
+	    console.log(d);
+    },'json');
+</pre>
 </body>
 </html>

@@ -28,10 +28,10 @@ function gos(){
 
     $app->checkHost();
 
-//获取域名
+    //获取域名
     $server = $_SERVER;
 
-//TODO 干掉$_SERVER
+    //TODO 干掉$_SERVER
     $host = $server['HTTP_HOST'];
 
     if($host != HOST){
@@ -54,13 +54,13 @@ function gos(){
     $path = 'api/'.$file_name.'.php';
 
 
-//文件是否存在
+    //文件是否存在
     if(!file_exists($path)){
         $json->msg = '接口不存在';
         return $json;
     }
 
-//类名
+    //类名
     $class_name = "\\api\\".$file_name;
 
     $obj = new $class_name($json);
@@ -70,7 +70,7 @@ function gos(){
         return $json;
     }
 
-//方法名
+    //方法名
     $fun = $_POST['func'];
 
     if(!method_exists($obj,$fun)){

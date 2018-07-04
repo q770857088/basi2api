@@ -1,17 +1,13 @@
 <?php
 namespace cache;
 class Cache{
-    static $path;
-
     public function __construct()
     {
-        if(null == static::$path){
-            static::$path = 'temp';
-        }
     }
 
     public static function getPath($k){
-        $path = static::$path.$k;
+        $path = ROOT_DIR.DIRECTORY_SEPARATOR.'temp'.DIRECTORY_SEPARATOR;
+        $path = $path.$k;
         return $path;
     }
 
