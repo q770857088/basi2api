@@ -69,5 +69,81 @@ $.post('http://api.basitour.com/user',
 	    console.log(d);
     },'json');
 </pre>
+<h1>用户是否注册</h1>
+<pre>
+$.post('http://api.basitour.com/user',
+{
+    func:'old_member',
+    phone:'15210404762',
+},
+function(d){
+    console.log(d);
+},
+'json');
+</pre>
+    <h1>用户登录</h1>
+    <h3>用户名密码登录</h3>
+    <pre>
+    $.post('http://api.basitour.com/user',
+	{
+		func:'login_pwd',
+		phone:'15210404762',
+		pwd:'iiiiii'
+	},
+	function(d){
+		console.log(d);
+	},
+'json');
+    </pre>
+    <h3>手机号验证码登录</h3>
+    <pre>
+        $.post('http://api.basitour.com/user',
+	{
+		func:'login',
+		phone:'15210404762',
+		code:'343323'
+	},
+	function(d){
+		console.log(d);
+	},
+'json');
+    </pre>
+    <h3>用户是否存在</h3>
+    <pre>
+        $.post('http://api.basitour.com/user',
+	{
+		func:'old_member',
+		phone:'15210404762',
+	},
+	function(d){
+		console.log(d);
+	},
+'json');
+    </pre>
+<h1>别墅评论</h1>
+<h2>根据别墅id得到评论</h2>
+    <pre>
+    $.post('http://api.basitour.com/comment',
+	{
+		func:'villa_ids',
+		id:'305',
+	},
+	function(d){
+		console.log(d);
+	},
+'json');
+    </pre>
+<h2>根据用户id得到评论</h2>
+<pre>
+    $.post('http://api.basitour.com/comment',
+	{
+		func:'user_ids',
+		token:'305',
+	},
+	function(d){
+		console.log(d);
+	},
+'json');
+</pre>
 </body>
 </html>
