@@ -145,5 +145,81 @@ function(d){
 	},
 'json');
 </pre>
+<h1>oss</h1>
+<h2>上传图片,申请ossKey</h2>
+<pre>
+    $.post('http://api.basitour.com/oss',
+	{
+		func:'getKey',
+		pos:'user',
+	},
+	function(d){
+		console.log(d);
+	},
+'json');
+</pre>
+<p>
+    pos参数:
+        user,用户图片
+        discover,发现图片
+        area,地区图片
+</p>
+<div>
+    <p>上传图片例子</p>
+    <pre>
+            //获取key
+    $.post('/backstage/area/getKey',{},function(d){
+        var loadOss = layer.load(1,{
+            shade: [0.5,'#222']
+        });
+        var key = d;
+        let file = $('#file')[0].files[0];
+
+        if(file === undefined){
+            return false;
+        }
+
+        let random = getFileName(file.name);
+
+        //init key
+        key.key = '';
+        key.key = key.dir + random;
+        //update image
+        uploadFileToOss(key,file);
+
+        $.post('/backstage/area/changeImage',{dir:random,id:currentAreaId,old:currentAreaPicture},function(d){
+            if(d.status === 0){
+                //删除刚上传的oss图片
+                layer.alert('失败');
+            }else{
+                table.reload('idTable');
+            }
+            layer.close(loadOss);
+        },'json');
+    });
+
+    function uploadFileToOss(key,file){
+        let formData = new FormData();
+        formData.append('key', key.key);
+        formData.append('policy', key.policy);
+        formData.append('OSSAccessKeyId',key.accessid);
+        formData.append('success_action_status',200);
+        formData.append('signature',key.signature);
+        formData.append('file',file);
+
+        $.ajax({
+            url: key.host,
+            type: 'POST',
+            cache: false,
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType:'json',
+            success:function(d){
+            }
+        });
+    }
+    </pre>
+</div>
 </body>
 </html>

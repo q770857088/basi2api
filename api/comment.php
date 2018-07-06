@@ -11,6 +11,10 @@ class comment{
         $this->json = $jsonS;
     }
 
+    /**
+     * 根据别墅id获得评论
+     * @return jsonS
+     */
     public function villa_ids(){
 
         if(!array_key_exists('id',$_POST)){
@@ -29,6 +33,10 @@ class comment{
         return $this->json;
     }
 
+    /**
+     * 根据用户id得到评论
+     * @return jsonS|string
+     */
     public function user_ids(){
 
         if(!array_key_exists('token',$_POST)){
@@ -67,5 +75,19 @@ class comment{
 
         $this->json->data = $res;
         return $this->json;
+    }
+
+    /**
+     * 添加评论
+     */
+    public function inserts(){
+
+    }
+
+    /**
+     * 给评论点赞
+     */
+    public function hit(){
+
     }
 }
