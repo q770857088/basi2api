@@ -7,8 +7,10 @@ class start{
     }
 
     public static function getValue($k){
-        if(array_key_exists($k,$_POST)){
-            return $_POST[$k];
+        $input = file_get_contents("php://input");
+        $data = json_decode($input,1);
+        if(array_key_exists($k,$data)){
+            return $data[$k];
         }else{
             return false;
         }

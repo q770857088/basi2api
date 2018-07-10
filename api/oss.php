@@ -146,4 +146,47 @@ class Oss
 //        return true;
     }
 
+    /**
+    **
+    * 判断object是否存在
+    *
+    * @param OssClient $ossClient OSSClient实例
+    * @param string $bucket bucket名字
+    * @return null
+    */
+    public static function doesObjectExist($object)
+    {
+        $ossClient = self::ossClient();
+        $bucket = BUCKET;
+        try{
+            //true/FALSE
+            $exist = $ossClient->doesObjectExist($bucket, $object);
+        } catch(OssException $e) {
+            return false;
+        }
+
+        return $exist;
+    }
+
+    public function imageExist(){
+        $img = start::getValue('img');
+        if(empty($img)){
+            $this->json->msg = '参数错误';
+            return $this->json;
+        }
+
+        //返回bool值,true或FALSE
+        $ossRes = self::doesObjectExist($img);
+        if($ossRes){
+            $this->json->data = 1;
+            $this->json->msg = '存在';
+            $this->json->status = 1;
+        }else{
+            $this->json->data = 0;
+            $this->json->msg = '不存在';
+            $this->json->status = 0;
+        }
+        return $this->json;
+    }
+
 }

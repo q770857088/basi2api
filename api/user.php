@@ -2,6 +2,7 @@
 namespace api;
 use classes\Db;
 use classes\Member;
+use root\start;
 
 class user{
     public $json;
@@ -16,12 +17,13 @@ class user{
      * @return jsonS
      */
     public function old_member(){
-        if(!array_key_exists('phone',$_POST)){
+
+        $phone = start::getValue('phone');
+
+        if(empty($phone)){
             $this->json->msg = '参数不正确';
             return $this->json;
         }
-
-        $phone = $_POST['phone'];
 
         $member = new Member($this->db);
 
@@ -42,14 +44,15 @@ class user{
      * 用户名密码登录
      */
     public function login_pwd(){
-        if(!array_key_exists('phone',$_POST) || !array_key_exists('pwd',$_POST)){
+        $pwd = start::getValue('pwd');
+        $phone = start::getValue('phone');
+        if(empty($phone)|| empty($pwd)){
             $this->json->msg = '参数不正确';
             return $this->json;
         }
 
         //里面改变了json中的data
         $this->old_member();
-        $phone = $_POST['phone'];
         if($this->json->data ===''){
             $this->json->msg = '用户不存在';
             $this->json->status = 0;
@@ -63,13 +66,14 @@ class user{
             return $this->json;
         }
 
-        if($userInfo['password'] !== $_POST['pwd']){
+        if($userInfo['password'] !== $pwd){
             $this->json->msg = '用户名或密码错误';
             return $this->json;
         }
         session_start();
+        unset($userInfo['password']);
 
-        $token = $this->setToken($phone,$userInfo['id']);
+        $token = $this->setToken($phone,$userInfo);
         $retData = [
             'token'=>$token,
             'userData'=>$userInfo
@@ -84,7 +88,11 @@ class user{
      * 用户登录,短信验证码登录
      */
     public function login(){
-        if(!array_key_exists('phone',$_POST) || !array_key_exists('code',$_POST)){
+
+        $phone = start::getValue('phone');
+        $code = start::getValue('code');
+
+        if(empty($code) || empty($phone)){
             $this->json->msg = '参数不正确';
             return $this->json;
         }
@@ -104,10 +112,9 @@ class user{
             return $this->json;
         }
 
-        $id = $this->json->data[0]['id'];
-        $phone = $_POST['phone'];
+        $userInfo = $this->json->data[0];
 
-        $token = $this->setToken($phone,$id);
+        $token = $this->setToken($phone,$userInfo);
         $retData = [
             'token'=>$token,
             'userData'=>$this->json->data[0]
@@ -123,13 +130,12 @@ class user{
      * @return jsonS|bool
      */
     private function checkCode(){
-        if(!array_key_exists('code',$_POST) || !array_key_exists('phone',$_POST)){
+        $code = start::getValue('code');
+        $phone = start::getValue('phone');
+        if(empty($code) || empty($phone)){
             $this->json->msg = '参数不正确';
             return $this->json;
         }
-
-        $phone = $_POST['phone'];
-        $code = $_POST['code'];
 
         session_start();
 
@@ -142,10 +148,10 @@ class user{
         }
     }
 
-    private function setToken($phone,$id){
-        $loginKey = uniqid().$phone.$id;
+    private function setToken($phone,$userInfo){
+        $loginKey = uniqid().$phone.$userInfo['id'];
 
-        $_SESSION[$loginKey] = $id;
+        $_SESSION[$loginKey] = $userInfo;
         $_SESSION['login_time'] = time();
 
         $token['username'] = $phone;
@@ -158,12 +164,12 @@ class user{
      * 用户注册
      */
     public function register(){
-        if(!array_key_exists('code',$_POST) || !array_key_exists('phone',$_POST)){
+        $code = start::getValue('code');
+        $phone = start::getValue('phone');
+        if(empty($code) || empty($phone)){
             $this->json->msg = '参数不正确';
             return $this->json;
         }
-
-        $phone = $_POST['phone'];
 
         $member = new Member($this->db);
 
@@ -187,7 +193,12 @@ class user{
             return $this->json;
         }
 
-        $token = $this->setToken($phone,$res);
+        $data = [];
+        $data['id'] = $res;
+        $data['tel'] = $phone;
+        $data['username'] = $phone;
+
+        $token = $this->setToken($phone,$data);
 
         $this->json->data = $token;
         return $this->json;

@@ -8,218 +8,317 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>预览效果</h1>
-    <blockquote>
-        http://api.basitour.com/mmm
-    </blockquote>
-    <h1>banner</h1>
-    <pre>
+<ol>
+    <li>
+        <h1>预览效果</h1>
+        <blockquote>
+            http://api.basitour.com/mmm
+        </blockquote>
+    </li>
+    <li>
+        <h1>banner</h1>
+        <pre>
         url:http://api.basitour.com/banner
         post
-        param:type(pc,wap),func('list')
-    </pre>
-    <h1>地区</h1>
-    <h3>所有列表</h3>
-    <code>
-        $.post('http://api.basitour.com/area',{func:'lists',id:'0'},function(d){
-        console.log(d);
-        },'json')
-    </code>
-    <h3>热门地区</h3>
-    <code>
-        $.post('http://api.basitour.com/area',{func:'hot'},function(d){
-        console.log(d);
-        },'json')
-    </code>
-    <h1>别墅</h1>
-    <pre>
+        param:type(pc,wap),func('lists')
+        </pre>
+    </li>
+    <li>
+        <h1>地区</h1>
+        <h3>所有列表</h3>
+        <code>
+            $.post('http://api.basitour.com/area',{func:'lists',id:'0'},function(d){
+            console.log(d);
+            },'json')
+        </code>
+    </li>
+    <li>
+        <h3>热门地区</h3>
+        <code>
+            $.post('http://api.basitour.com/area',{func:'hot'},function(d){
+            console.log(d);
+            },'json')
+        </code>
+    </li>
+    <li>
+        <h1>别墅</h1>
+        <pre>
         $.post('http://api.basitour.com/villa',{func:'lists'},function(d){
-	console.log(d);
-},'json');
-    </pre>
-    <h1>公共接口</h1><i>不同的参数代表不同读数据</i>
-    <pre>
-$.post('http://api.basitour.com/common',
-        {func:'lists',table:'act'},
+            console.log(d);
+        },'json');
+        </pre>
+    </li>
+    <li>
+        <h3>别墅收藏</h3>
+        <p>
+            {func:'collect',token:'token',villa:'666'}
+        </p>
+    </li>
+    <li>
+        <h3>别墅是否收藏过</h3>
+        {func:'collected','token':'token','villa:'666'}
+    </li>
+    <li>
+        <h1>公共接口</h1>
+        <i>不同的参数代表不同读数据</i>
+        <pre>
+            $.post('http://api.basitour.com/common',
+            {func:'lists',table:'act'},
+            function(d){
+                console.log(d);
+            },'json');
+
+            <h2>table参数:</h2>
+            act===活动数据,
+            act_villa===活动别墅,
+            area=>地区
+        </pre>
+    </li>
+    <li>
+        <h1>发送验证码</h1>
+        <pre>
+            $.post('http://api.basitour.com/msg',
+                {func:'sendMsg',phone:'15210404762'},
+                function(d){
+                    console.log(d);
+                },'json'
+            );
+        </pre>
+    </li>
+    <li>
+        <h1>注册接口</h1>
+        <pre>
+        $.post('http://api.basitour.com/user',
+            {func:'register',phone:'15210404762',
+            code:'401854'
+            },
+            function(d){
+                console.log(d);
+            },'json');
+        </pre>
+    </li>
+    <li>
+        <h1>用户是否注册</h1>
+        <pre>
+            $.post('http://api.basitour.com/user',
+            {
+                func:'old_member',
+                phone:'15210404762',
+            },
+            function(d){
+                console.log(d);
+            },
+            'json');
+        </pre>
+    </li>
+    <li>
+        <h1>用户登录</h1>
+        <h3>用户名密码登录</h3>
+        <pre>
+            $.post('http://api.basitour.com/user',
+            {
+                func:'login_pwd',
+                phone:'15210404762',
+                pwd:'iiiiii'
+            },
+            function(d){
+                console.log(d);
+            },
+            'json');
+        </pre>
+    </li>
+    <li>
+        <h3>手机号验证码登录</h3>
+        <pre>
+        $.post('http://api.basitour.com/user',
+        {
+            func:'login',
+            phone:'15210404762',
+            code:'343323'
+        },
         function(d){
-	        console.log(d);
-        },'json');
-
-        <h2>table参数:</h2>
-        act===活动数据,
-        act_villa===活动别墅,
-        area=>地区
+            console.log(d);
+        },
+        'json');
     </pre>
-<h1>发送验证码</h1>
-<pre>
-$.post('http://api.basitour.com/msg',
-    {func:'sendMsg',phone:'15210404762'},
-    function(d){
-	    console.log(d);
-    },'json'
-);
-</pre>
-<h1>注册接口</h1>
-<pre>
-$.post('http://api.basitour.com/user',
-    {func:'register',phone:'15210404762',
-    code:'401854'
-    },
-    function(d){
-	    console.log(d);
-    },'json');
-</pre>
-<h1>用户是否注册</h1>
-<pre>
-$.post('http://api.basitour.com/user',
-{
-    func:'old_member',
-    phone:'15210404762',
-},
-function(d){
-    console.log(d);
-},
-'json');
-</pre>
-    <h1>用户登录</h1>
-    <h3>用户名密码登录</h3>
-    <pre>
-    $.post('http://api.basitour.com/user',
-	{
-		func:'login_pwd',
-		phone:'15210404762',
-		pwd:'iiiiii'
-	},
-	function(d){
-		console.log(d);
-	},
-'json');
-    </pre>
-    <h3>手机号验证码登录</h3>
-    <pre>
-        $.post('http://api.basitour.com/user',
-	{
-		func:'login',
-		phone:'15210404762',
-		code:'343323'
-	},
-	function(d){
-		console.log(d);
-	},
-'json');
-    </pre>
-    <h3>用户是否存在</h3>
-    <pre>
-        $.post('http://api.basitour.com/user',
-	{
-		func:'old_member',
-		phone:'15210404762',
-	},
-	function(d){
-		console.log(d);
-	},
-'json');
-    </pre>
-<h1>别墅评论</h1>
-<h2>根据别墅id得到评论</h2>
-    <pre>
-    $.post('http://api.basitour.com/comment',
-	{
-		func:'villa_ids',
-		id:'305',
-	},
-	function(d){
-		console.log(d);
-	},
-'json');
-    </pre>
-<h2>根据用户id得到评论</h2>
-<pre>
-    $.post('http://api.basitour.com/comment',
-	{
-		func:'user_ids',
-		token:'305',
-	},
-	function(d){
-		console.log(d);
-	},
-'json');
-</pre>
-<h1>oss</h1>
-<h2>上传图片,申请ossKey</h2>
-<pre>
-    $.post('http://api.basitour.com/oss',
-	{
-		func:'getKey',
-		pos:'user',
-	},
-	function(d){
-		console.log(d);
-	},
-'json');
-</pre>
-<p>
-    pos参数:
-        user,用户图片
-        discover,发现图片
-        area,地区图片
-</p>
-<div>
-    <p>上传图片例子</p>
-    <pre>
-            //获取key
-    $.post('/backstage/area/getKey',{},function(d){
-        var loadOss = layer.load(1,{
-            shade: [0.5,'#222']
-        });
-        var key = d;
-        let file = $('#file')[0].files[0];
+    </li>
+    <li>
+        <h3>用户是否存在</h3>
+        <pre>
+            $.post('http://api.basitour.com/user',
+            {
+                func:'old_member',
+                phone:'15210404762',
+            },
+            function(d){
+                console.log(d);
+            },
+            'json');
+        </pre>
+    </li>
+    <li>
 
-        if(file === undefined){
-            return false;
-        }
+        <h1>别墅评论</h1>
+        <h2>根据别墅id得到评论</h2>
+        <pre>
+            $.post('http://api.basitour.com/comment',
+            {
+                func:'villa_ids',
+                id:'305',
+            },
+            function(d){
+                console.log(d);
+            },
+            'json');
+        </pre>
+    </li>
+    <li>
+        <h2>根据用户id得到评论</h2>
+        <pre>
+            $.post('http://api.basitour.com/comment',
+            {
+                func:'user_ids',
+                token:'305',
+            },
+            function(d){
+                console.log(d);
+            },
+            'json');
+        </pre>
+    </li>
+    <li>
+        <h1>oss</h1>
+        <h2>上传图片,申请ossKey</h2>
+        <pre>
+            $.post('http://api.basitour.com/oss',
+            {
+                func:'getKey',
+                pos:'user',
+            },
+            function(d){
+                console.log(d);
+            },
+        'json');
+        </pre>
+        <p>
+            pos参数:
+            user,用户图片
+            discover,发现图片
+            area,地区图片
+        </p>
+    </li>
+    <li>
+        <div>
+                    <p>上传图片例子</p>
+                    <pre>
+                    //获取key
+            $.post('/backstage/area/getKey',{},function(d){
+                var loadOss = layer.load(1,{
+                    shade: [0.5,'#222']
+                });
+                var key = d;
+                let file = $('#file')[0].files[0];
 
-        let random = getFileName(file.name);
+                if(file === undefined){
+                    return false;
+                }
 
-        //init key
-        key.key = '';
-        key.key = key.dir + random;
-        //update image
-        uploadFileToOss(key,file);
+                let random = getFileName(file.name);
 
-        $.post('/backstage/area/changeImage',{dir:random,id:currentAreaId,old:currentAreaPicture},function(d){
-            if(d.status === 0){
-                //删除刚上传的oss图片
-                layer.alert('失败');
-            }else{
-                table.reload('idTable');
+                //init key
+                key.key = '';
+                key.key = key.dir + random;
+                //update image
+                uploadFileToOss(key,file);
+
+                $.post('/backstage/area/changeImage',{dir:random,id:currentAreaId,old:currentAreaPicture},function(d){
+                    if(d.status === 0){
+                        //删除刚上传的oss图片
+                        layer.alert('失败');
+                    }else{
+                        table.reload('idTable');
+                    }
+                    layer.close(loadOss);
+                },'json');
+            });
+
+            function uploadFileToOss(key,file){
+                let formData = new FormData();
+                formData.append('key', key.key);
+                formData.append('policy', key.policy);
+                formData.append('OSSAccessKeyId',key.accessid);
+                formData.append('success_action_status',200);
+                formData.append('signature',key.signature);
+                formData.append('file',file);
+
+                $.ajax({
+                    url: key.host,
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType:'json',
+                    success:function(d){
+                    }
+                });
             }
-            layer.close(loadOss);
-        },'json');
-    });
+            </pre>
+        </div>
+    </li>
+    <li>
+        <h1>判断图片是否存在</h1>
+        <pre>
+            $.post('http://api.basitour.com/oss',
+            {
+                func:'imageExist',
+                img:'bs2/banner/e55849e015a405051523110f0c9c72a3.jpeg',
+            },
+            function(d){
+                console.log(d);
+            },
+            'json')
+        </pre>
+    </li>
+    <li>
 
-    function uploadFileToOss(key,file){
-        let formData = new FormData();
-        formData.append('key', key.key);
-        formData.append('policy', key.policy);
-        formData.append('OSSAccessKeyId',key.accessid);
-        formData.append('success_action_status',200);
-        formData.append('signature',key.signature);
-        formData.append('file',file);
-
-        $.ajax({
-            url: key.host,
-            type: 'POST',
-            cache: false,
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType:'json',
-            success:function(d){
-            }
-        });
-    }
-    </pre>
-</div>
+        <h1>评论上传</h1>
+        <pre>
+            $.post('http://api.basitour.com/comment',
+                {
+                    func:'inserts',
+                    token:'token',
+                    img:['bs2/banner/e55849e015a405051523110f0c9c72a3.jpeg'],//图片必须是数组
+                    content:'评论内容',
+                    villa_id:'666',
+                },
+                function(d){
+                    console.log(d);
+                },
+            'json');
+        </pre>
+    </li>
+    <li>
+        <h3>
+            评论点赞接口
+        </h3>
+        同评论上传接口:
+        func:'hit',
+    </li>
+    <li>
+        <h1>优惠券接口</h1>
+        <pre>
+            $.post('http://api.basitour.com/discount',
+            {
+                func:'lists',
+                token:'token'
+            },
+            function(d){
+                console.log(d);
+            },
+        'json');
+        </pre>
+    </li>
+</ol>
 </body>
 </html>

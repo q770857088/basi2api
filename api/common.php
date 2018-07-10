@@ -1,6 +1,7 @@
 <?php
 namespace api;
 use classes\Db;
+use root\start;
 
 /**
  * 公用
@@ -23,9 +24,8 @@ class common{
         ];
         $this->db = new Db(DB_CON, DB_USER, DB_PWD);
 
-        if(array_key_exists('table',$_POST)){
-            $tableKey = $_POST['table'];
-        }else{
+        $tableKey = start::getValue('table');
+        if(empty($tableKey)){
             $this->json->msg= '需要参数table';
             return $this->json;
         }

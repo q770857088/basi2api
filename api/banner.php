@@ -1,6 +1,7 @@
 <?php
 namespace api;
 use classes\Db;
+use root\start;
 
 class banner{
 
@@ -19,12 +20,12 @@ class banner{
         $banner = new \classes\Banner($db);
 
         $typeArr = ['pc'=>0,'wap'=>'1'];
-        if(!array_key_exists('type',$_POST)){
+        $param = start::getValue('type');
+        if(empty($param)){
             $this->json->msg = '请传参数type';
             return $this->json;
         }
 
-        $param = $_POST['type'];
         if(array_key_exists($param,$typeArr)){
             $type = $typeArr[$param];
         }else{

@@ -7,6 +7,7 @@ use Aliyun\Core\DefaultAcsClient;
 use Aliyun\Core\Profile\DefaultProfile;
 use cache\Cache;
 use http\Env\Request;
+use root\start;
 
 class msg{
 
@@ -59,14 +60,12 @@ class msg{
 
         Cache::setCache($ip,$current_time);
 
-//        $_POST['phone'] = '15210404762';
-        if(!array_key_exists('phone',$_POST)){
+        //获取用户手机号
+        $tel = start::getValue('phone');
+        if(empty($tel)){
             $this->json->msg = '没有传phone';
             return $this->json;
         }
-
-        //获取用户手机号
-        $tel = $_POST['phone'];
 
         $sessionKey = 'time'.$tel;
 

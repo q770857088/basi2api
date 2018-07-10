@@ -25,6 +25,13 @@ class Db{
         return ($stmt->fetchAll(\PDO::FETCH_ASSOC));
     }
 
+    public function query($sql){
+        /*查询*/
+        $stmt = $this->db->prepare($sql);
+
+        return ($stmt->fetchAll(\PDO::FETCH_ASSOC));
+    }
+
     //删除方法
     public function dels(){
         /*删除*/

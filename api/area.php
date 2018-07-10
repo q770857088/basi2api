@@ -1,6 +1,7 @@
 <?php
 namespace api;
 use classes\Db;
+use root\start;
 
 class area{
 
@@ -17,13 +18,14 @@ class area{
 
     public function lists(){
 
+        $linkageId = start::getValue('id');
         //是否传了参数
-        if(!array_key_exists('id',$_POST)){
+        if(empty($linkageId)){
             $this->json->msg = '没有传参数id';
             return $this->json;
         }
 
-        $linkageId = intval($_POST['id']);
+        $linkageId = intval($linkageId);
 
         $res = $this->obj->lists($linkageId);
 

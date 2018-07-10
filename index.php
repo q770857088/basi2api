@@ -1,5 +1,4 @@
 <?php
-
 spl_autoload_register(function ($class_name) {
     $arr = explode('\\',$class_name);
     if($arr[0] === 'root'){
@@ -65,13 +64,13 @@ function gos(){
 
     $obj = new $class_name($json);
 
-    if(!array_key_exists('func',$_POST)){
+    //方法名
+    $fun = \root\start::getValue('func');
+
+    if(empty($fun)){
         $json->msg = '没有func参数';
         return $json;
     }
-
-    //方法名
-    $fun = $_POST['func'];
 
     if(!method_exists($obj,$fun)){
         $json->msg = '方法不存在';
